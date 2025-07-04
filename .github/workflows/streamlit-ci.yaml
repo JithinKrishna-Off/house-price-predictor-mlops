@@ -1,4 +1,5 @@
 name: Streamlit CI
+
 on:
   push:
     paths:
@@ -27,4 +28,4 @@ jobs:
         with:
           context: ./streamlit_app
           push: true
-          tags: docker.io/${{
+          tags: docker.io/${{ vars.DOCKERHUB_USERNAME }}/streamlit:latest
