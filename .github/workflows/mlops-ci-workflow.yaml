@@ -35,11 +35,13 @@ jobs:
         run: |
           python src/features/engineer.py \
             --input data/processed/cleaned_house_data.csv \
-            --output data/processed/featured_house_data.csv
+            --output data/processed/featured_house_data.csv \
             --preprocessor src/models/preprocessor.pkl
 
       - name: Train Model
         run: |
           python src/models/train_model.py \
-            --input data/processed/featured_house_data.csv \
-            --output models/house_price_model.pkl
+            --config configs/model_config.yaml \
+            --data data/processed/featured_house_data.csv \
+            --models-dir models \
+            --mlflow-tracking-uri http://localhost:5555
