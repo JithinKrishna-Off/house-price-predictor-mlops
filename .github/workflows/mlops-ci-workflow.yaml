@@ -26,18 +26,19 @@ jobs:
 
       
 
-      - name: Build Docker images
+      - name: Run Data Processing
         run: |
-          docker build -t jithinkrishna26/fastapi:dev .
-          docker build -t jithinkrishna26/streamlit:dev ./streamlit_app
+          python src/data/run_processing.py \
+            --input data/raw/house_data.csv \
+            --output data/processed/cleaned_house_data.csv
+      - name: Do Feature Engineering
+        run: |
+          python src/features/engineer.py \
+            --input data/processed/cleaned_house_data.csv \
+            --output data/processed/featured_house_data.csv
 
-      - name: Push Docker images to DockerHub
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: |
-            jithinkrishna26/fastapi:dev
-            jithinkrishna26/streamlit:dev
-
-
-
+      - name: Train Model
+        run: |
+          python src/models/train_model.py \
+            --input data/processed/featured_house_data.csv \
+            --output models/house_price_model.pkl
